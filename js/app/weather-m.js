@@ -4,14 +4,14 @@
 define([
     'underscore',
     'backbone',
-    'log'
+    'app-config'
 ],
-function( _, Backbone ) {
+function( _, Backbone, appConfig ) {
 
     var WeatherModel = Backbone.Model.extend({
 
         urlRoot: function() {
-            return 'https://api.forecast.io/forecast/' + this.API_KEY;
+            return 'https://api.forecast.io/forecast/' + appConfig.FORECAST_API_KEY;
         },
 
         url: function() {

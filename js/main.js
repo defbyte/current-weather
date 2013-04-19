@@ -17,10 +17,6 @@ define([
     "app/search-v"
 ], function( $, _, Backbone, appConfig, weatherModel, weatherView, searchView ) {
 
-        // Need to break this out as config data loaded at run time.
-        // API keys should not be embedded in front-end source.
-        weatherModel.API_KEY = appConfig.FORECAST_API_KEY;
-
         // Success Handler when asking browser's geo location
         function geoSuccess(position) {
             weatherModel.set(
