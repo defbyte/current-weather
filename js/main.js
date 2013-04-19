@@ -46,7 +46,4 @@ define([
         } else {
             geoError();
         }
-
-        // Hide the current conditions at startup
-        weatherView.$el.hide();
 });

@@ -18,7 +18,6 @@ function( $, _, Backbone, weatherModel, revgeoModel ) {
             this.listenTo( weatherModel, 'change', this.render );
             this.listenTo( revgeoModel, 'change', this.updateLocation );
 
-            this.$el.hide();
         },
 
         render: function() {
@@ -31,7 +30,7 @@ function( $, _, Backbone, weatherModel, revgeoModel ) {
                 summary: weatherModel.get('currently').summary,
                 temperature: Math.round(weatherModel.get('currently').temperature)
             });
-            this.$el.show().html( html );
+            this.$el.html( html );
 
             // Now that we have weather, get human readable location information
             revgeoModel.fetch({
