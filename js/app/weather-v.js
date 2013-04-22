@@ -1,56 +1,48 @@
-// Weather App
-// View of current weather conditions.
+/*
+    Weather App
+    Primary view.
+    Displays current weather conditions.
+*/
 
 define([
     'jquery',
     'underscore',
     'backbone',
-    './weather-m',
-    './reversegeocoder-m'
+    './userlocation-m',
+    './forecast-m'
 ],
-function( $, _, Backbone, weatherModel, revgeoModel ) {
+function( $, _, Backbone, userLocationModel, forecastModel ) {
 
     var WeatherView = Backbone.View.extend({
         el: '#current-weather',
 
         initialize: function() {
 
-            this.listenTo( weatherModel, 'change', this.render );
-            this.listenTo( revgeoModel, 'change', this.updateLocation );
+            this.listenTo( userLocationModel, 'error', this.showError );
+            this.listenTo( forecastModel, 'change', this.render );
 
         },
 
         render: function() {
 
-            log('render current conditions');
+            log('render current conditions', forecastModel);
             // Populate template with current conditions
             var html = '';
             this.tmpl = this.tmpl || _.template($("#current-tmpl").html());
-            html = this.tmpl({
-                summary: weatherModel.get('currently').summary,
-                temperature: Math.round(weatherModel.get('currently').temperature)
-            });
-            this.$el.html( html );
+            if( forecastModel.get('currently') ) {
+                html = this.tmpl({
+                    summary: forecastModel.get('currently').summary,
+                    temperature: Math.round(forecastModel.get('currently').temperature)
+                });
+            }
 
-            // Now that we have weather, get human readable location information
-            revgeoModel.fetch({
-                dataType: 'json',
-                data: {
-                    latlng: weatherModel.get('latitude') + ',' + weatherModel.get('longitude'),
-                    sensor: false
-                }
-            });
+            this.$el.html( html );
 
             return this;
         },
 
-        updateLocation: function() {
-            log('updateLocation');
-            this.$el.append('<p>' + revgeoModel.get('address') + '</p>');
-        },
-
-        showError: function(error) {
-            this.$el.html('<p class="error">' + error + '</p>');
+        showError: function(e, msg) {
+            this.$el.html('<p class="error">' + msg + '</p>');
         }
     });
 

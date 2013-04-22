@@ -1,3 +1,9 @@
+/*
+    Current Weather App.
+    Displays current weather information using the Forecast.io API.
+    Attempts to get human readable location inforation from Google's Reverse Geocoder API.
+*/
+
 requirejs.config({
     paths: {
         "backbone": "libs/backbone-min",
@@ -7,39 +13,15 @@ requirejs.config({
     }
 });
 
-define([
-    "jquery",
-    "underscore",
-    "backbone",
-    "app-config",
-    "app/weather-m",
-    "app/weather-v",
-    "app/search-v"
-], function( $, _, Backbone, appConfig, weatherModel, weatherView, searchView ) {
-
-        // Success Handler when asking browser's geo location
-        function geoSuccess(position) {
-            weatherModel.set(
-                {
-                   'latitude': position.coords.latitude,
-                   'longitude': position.coords.longitude
-                },
-                {silent: true}
-            );
-            weatherModel.fetch({
-                dataType: 'jsonp'
-            });
-        }
-
-        // Error Handler when asking browser's geo location
-        function geoError() {
-            weatherView.showError('Could not determine your location automatically, please use the form below.');
-        }
-
-        // Ask Browser nicely for geo location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-        } else {
-            geoError();
-        }
+define(function() {
+    // WeatherView sets the application up
+    require([
+        'app/userlocation-m',
+        'app/weather-v',
+        'app/search-v',
+        'app/reversegeocoder-v'
+    ], function(userLocationModel, weatherView, searchView, revgeoView){
+        log('we could do stuff here with our 3 views.');
+        userLocationModel.load();
+    });
 });

@@ -1,13 +1,15 @@
-// Weather App
-// View for the search form
+/*
+    Weather App
+    Search Form - requires latitude and longitude values.
+*/
 
 define([
     'jquery',
     'underscore',
     'backbone',
-    './weather-m'
+    './userlocation-m'
 ],
-function( $, _, Backbone, weatherModel ) {
+function( $, _, Backbone, userLocationModel ) {
 
     var SearchView = Backbone.View.extend({
         el: '#get-current-weather',
@@ -26,16 +28,7 @@ function( $, _, Backbone, weatherModel ) {
 
         search: function(e) {
             e.preventDefault();
-            weatherModel.set(
-                {
-                    'latitude': this.$lat.val(),
-                    'longitude': this.$lng.val()
-                },
-                {silent: true}
-            );
-            weatherModel.fetch({
-                dataType: 'jsonp'
-            });
+            userLocationModel.updateLocation( this.$lat.val(), this.$lng.val() );
         }
     });
 
