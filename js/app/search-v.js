@@ -28,7 +28,10 @@ function( $, _, Backbone, userLocationModel ) {
 
         search: function(e) {
             e.preventDefault();
-            userLocationModel.updateLocation( this.$lat.val(), this.$lng.val() );
+            userLocationModel.updateLocation({
+                latitude: this.$lat.val(),
+                longitude: this.$lng.val()
+            });
         }
     });
 

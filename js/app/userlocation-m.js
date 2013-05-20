@@ -25,7 +25,11 @@ function( _, Backbone, log ) {
             // Success Handler when asking browser's geo location
             var self = this;
             function geoSuccess(position) {
-                self.updateLocation(position.coords.latitude, position.coords.longitude );
+                self.updateLocation({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    forceRefresh: true
+                });
             }
 
             // Error Handler when asking browser's geo location
@@ -41,16 +45,24 @@ function( _, Backbone, log ) {
             }
         },
 
-        updateLocation: function(latitude, longitude) {
-            latitude = latitude || this.get('latitude');
-            longitude = longitude || this.get('longitude');
-            this.set({
-                'latitude': latitude,
-                'longitude': longitude
-                },
-                {silent:true}
-            );
-            this.trigger('change');
+        updateLocation: function(options) {
+            latitude = options.latitude || this.get('latitude');
+            longitude = options.longitude || this.get('longitude');
+            if (options.forceRefresh) {
+                this.set({
+                    'latitude': latitude,
+                    'longitude': longitude
+                    },
+                    {silent:true}
+                );
+                this.trigger('change');
+            } else {
+                this.set({
+                    'latitude': latitude,
+                    'longitude': longitude
+                    }
+                );
+            }
         }
     });
 
